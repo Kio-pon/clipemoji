@@ -1,0 +1,214 @@
+/* ClipEmoji - styling leans on the shell's own theme variables where possible
+   so it stays coherent in both light and dark Yaru. */
+
+.clipemoji-menu-box {
+    padding: 0;
+}
+
+.clipemoji-host {
+    padding: 0;
+}
+
+.clipemoji-root {
+    width: 420px;
+    padding: 10px;
+    spacing: 8px;
+}
+
+/* --- header / tabs --- */
+
+.clipemoji-header {
+    padding-bottom: 2px;
+}
+
+.clipemoji-tabs {
+    spacing: 4px;
+    width: 400px;
+}
+
+.clipemoji-tab {
+    padding: 7px 10px;
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.65);
+    background-color: transparent;
+    transition-duration: 150ms;
+}
+
+.clipemoji-tab:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.clipemoji-tab:focus {
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.clipemoji-tab:selected {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: white;
+    font-weight: 700;
+}
+
+.clipemoji-tab-inner {
+    spacing: 7px;
+}
+
+/* --- search --- */
+
+.clipemoji-search {
+    border-radius: 9px;
+    padding: 7px 10px;
+    margin-bottom: 2px;
+}
+
+/* --- shared page/scroll --- */
+
+.clipemoji-page {
+    spacing: 6px;
+}
+
+.clipemoji-scroll {
+    max-height: 340px;
+}
+
+/* --- clipboard list --- */
+
+.clipemoji-list {
+    spacing: 3px;
+}
+
+.clipemoji-item {
+    border-radius: 9px;
+    spacing: 2px;
+    transition-duration: 120ms;
+}
+
+.clipemoji-item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.clipemoji-item-main {
+    padding: 7px 9px;
+    border-radius: 9px;
+}
+
+.clipemoji-item-main:hover,
+.clipemoji-item-main:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.clipemoji-item-inner {
+    spacing: 9px;
+}
+
+.clipemoji-item-icon {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.clipemoji-item-text {
+    font-size: 0.95em;
+}
+
+.clipemoji-thumb {
+    border-radius: 5px;
+}
+
+.clipemoji-row-btn {
+    padding: 6px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.4);
+    transition-duration: 120ms;
+}
+
+.clipemoji-row-btn:hover,
+.clipemoji-row-btn:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.clipemoji-row-btn.pinned {
+    color: #f5a623;
+}
+
+/* --- toolbar --- */
+
+.clipemoji-toolbar {
+    spacing: 6px;
+    padding: 6px 2px 0 2px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clipemoji-tool-btn {
+    padding: 5px;
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.clipemoji-tool-btn:hover,
+.clipemoji-tool-btn:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.clipemoji-tool-btn.active {
+    color: #f5a623;
+}
+
+.clipemoji-tool-label {
+    font-size: 0.8em;
+    color: #f5a623;
+}
+
+/* --- emoji grid --- */
+
+.clipemoji-cat-bar {
+    spacing: 2px;
+    padding-bottom: 4px;
+}
+
+.clipemoji-cat-btn {
+    padding: 6px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.45);
+    transition-duration: 120ms;
+}
+
+.clipemoji-cat-btn:hover,
+.clipemoji-cat-btn:focus {
+    background-color: rgba(255, 255, 255, 0.10);
+    color: white;
+}
+
+.clipemoji-cat-btn:selected {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: white;
+}
+
+.clipemoji-grid-host {
+    spacing: 0;
+}
+
+.clipemoji-row {
+    spacing: 2px;
+}
+
+.clipemoji-emoji {
+    font-size: 21px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    transition-duration: 100ms;
+}
+
+.clipemoji-emoji:hover,
+.clipemoji-emoji:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* --- empty state --- */
+
+.clipemoji-empty {
+    padding: 26px 10px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9em;
+}

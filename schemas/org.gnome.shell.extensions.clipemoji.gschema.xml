@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="clipemoji">
+  <schema id="org.gnome.shell.extensions.clipemoji"
+          path="/org/gnome/shell/extensions/clipemoji/">
+
+    <key name="toggle-clipboard" type="as">
+      <default><![CDATA[['<Super>v']]]></default>
+      <summary>Open the panel on the clipboard tab</summary>
+    </key>
+
+    <key name="toggle-emoji" type="as">
+      <default><![CDATA[['<Super>period']]]></default>
+      <summary>Open the panel on the emoji tab</summary>
+    </key>
+
+    <key name="history-size" type="i">
+      <default>50</default>
+      <range min="5" max="500"/>
+      <summary>Maximum clipboard entries kept</summary>
+    </key>
+
+    <key name="cache-images" type="b">
+      <default>true</default>
+      <summary>Store copied images in history</summary>
+    </key>
+
+    <key name="private-mode" type="b">
+      <default>false</default>
+      <summary>Pause clipboard recording</summary>
+    </key>
+
+    <key name="paste-on-select" type="b">
+      <default>false</default>
+      <summary>Attempt to auto-paste after selecting an item</summary>
+      <description>Synthesises Ctrl+V. Unreliable under XWayland and some Electron apps.</description>
+    </key>
+
+    <key name="excluded-apps" type="as">
+      <default><![CDATA[['org.keepassxc.KeePassXC', 'Bitwarden', '1Password', 'org.gnome.World.Secrets']]]></default>
+      <summary>WM_CLASS values whose copies are never recorded</summary>
+    </key>
+
+    <key name="recent-emojis" type="as">
+      <default>[]</default>
+      <summary>Most recently used emoji</summary>
+    </key>
+
+    <key name="show-indicator" type="b">
+      <default>true</default>
+      <summary>Show the panel icon in the top bar</summary>
+    </key>
+
+  </schema>
+</schemalist>

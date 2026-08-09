@@ -1,0 +1,4 @@
+schemas/gschemas.compiled
+*.shell-extension.zip
+tools/*.txt
+tools/*.xml
