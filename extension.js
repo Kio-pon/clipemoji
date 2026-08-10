@@ -102,7 +102,6 @@ class ClipEmojiIndicator extends PanelMenu.Button {
         this._clipboardPage = new ClipboardPanel(this._manager, this._settings);
         this._clipboardPage.setOnActivate(entry => {
             this._manager.applyEntry(entry);
-            this._hasPendingPick = false;
             this._closeAndMaybePaste();
         });
         this._clipboardPage.setFocusSearchHook(focusSearch);
@@ -113,7 +112,7 @@ class ClipEmojiIndicator extends PanelMenu.Button {
         this._emojiPage.setFocusSearchHook(focusSearch);
         this._emojiPage.connect('picked', (_p, glyph) => {
             this._manager.setText(glyph);
-            this._hasPendingPick = true;
+            this._closeAndMaybePaste();
         });
         this._emojiPage.visible = false;
         root.add_child(this._emojiPage);
@@ -188,7 +187,6 @@ class ClipEmojiIndicator extends PanelMenu.Button {
     }
 
     _onOpened() {
-        this._hasPendingPick = false;
         this._search.set_text('');
         this.setTab(this._tab);
         // Focus must wait for the menu's own open animation to settle.
@@ -208,16 +206,6 @@ class ClipEmojiIndicator extends PanelMenu.Button {
             GLib.Source.remove(this._focusTimer);
             this._focusTimer = null;
         }
-        // Synthesized paste only has somewhere to land once the popup grab
-        // releases and focus returns to whatever was behind it.
-        if (this._hasPendingPick && this._settings.get_boolean('paste-on-select')) {
-            this._hasPendingPick = false;
-            this._pasteTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 120, () => {
-                this._pasteTimer = null;
-                this._sendPaste();
-                return GLib.SOURCE_REMOVE;
-            });
-        }
     }
 
     _closeAndMaybePaste() {
@@ -235,7 +223,7 @@ class ClipEmojiIndicator extends PanelMenu.Button {
         try {
             const seat = Clutter.get_default_backend().get_default_seat();
             const vd = seat.create_virtual_device(Clutter.InputDeviceType.KEYBOARD_DEVICE);
-            const t = global.get_current_time() * 1000;
+            const t = global.get_current_time();
             vd.notify_keyval(t, Clutter.KEY_Control_L, Clutter.KeyState.PRESSED);
             vd.notify_keyval(t, Clutter.KEY_v, Clutter.KeyState.PRESSED);
             vd.notify_keyval(t, Clutter.KEY_v, Clutter.KeyState.RELEASED);
