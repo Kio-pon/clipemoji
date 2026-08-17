@@ -1,7 +1,8 @@
 {
   "uuid": "clipemoji@kio-pon.github.io",
   "name": "ClipEmoji",
-  "description": "Unified clipboard history and emoji picker in a single panel. Press Super+V for clipboard history, Super+. for emoji. Fully offline - no network calls, no telemetry.",
+  "url": "https://github.com/Kio-pon/clipemoji",
+  "description": "Unified clipboard history and emoji picker in a single panel. Press Super+V for clipboard history, Super+. for emoji. Reads and writes the system clipboard directly (via St.Clipboard) to build clipboard history and to paste picked emoji/history items. Fully offline - no network calls, no telemetry.",
   "shell-version": ["46", "47"],
   "settings-schema": "org.gnome.shell.extensions.clipemoji",
   "version": 1

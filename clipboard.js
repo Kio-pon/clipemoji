@@ -199,22 +199,41 @@ export class ClipboardManager {
 
     applyEntry(entry) {
         this._refreshing = true;
-        try {
-            if (entry.isImage) {
-                const [ok, data] = GLib.file_get_contents(entry.path);
-                if (ok) this._clipboard.set_content(CLIPBOARD_TYPE, entry.mimetype,
-                    new GLib.Bytes(data));
-            } else {
-                this._clipboard.set_text(CLIPBOARD_TYPE, entry.text);
-            }
-        } catch (e) {
-            logError(e, 'ClipEmoji: failed to apply entry');
-        } finally {
-            // Release after the selection event has had a chance to fire.
-            GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
-                this._refreshing = false;
-                return GLib.SOURCE_REMOVE;
+        if (entry.isImage) {
+            const file = Gio.File.new_for_path(entry.path);
+            file.load_contents_async(null, (_file, res) => {
+                if (this._destroyed) {
+                    this._refreshing = false;
+                    return;
+                }
+                try {
+                    const [ok, data] = file.load_contents_finish(res);
+                    if (ok) {
+                        this._clipboard.set_content(CLIPBOARD_TYPE, entry.mimetype,
+                            new GLib.Bytes(data));
+                    }
+                } catch (e) {
+                    logError(e, 'ClipEmoji: failed to apply entry');
+                } finally {
+                    // Release after the selection event has had a chance to fire.
+                    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+                        this._refreshing = false;
+                        return GLib.SOURCE_REMOVE;
+                    });
+                }
             });
+        } else {
+            try {
+                this._clipboard.set_text(CLIPBOARD_TYPE, entry.text);
+            } catch (e) {
+                logError(e, 'ClipEmoji: failed to apply entry');
+            } finally {
+                // Release after the selection event has had a chance to fire.
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+                    this._refreshing = false;
+                    return GLib.SOURCE_REMOVE;
+                });
+            }
         }
     }
 
@@ -271,20 +290,33 @@ export class ClipboardManager {
     // --- persistence -----------------------------------------------------
 
     _load() {
-        try {
-            if (!this._registryFile.query_exists(null)) return;
-            const [ok, contents] = this._registryFile.load_contents(null);
-            if (!ok) return;
-            const parsed = JSON.parse(new TextDecoder().decode(contents));
-            this._entries = (parsed.entries || [])
-                .map(ClipboardEntry.fromJSON)
-                // Drop entries whose image file was cleaned up externally.
-                .filter(e => !e.isImage || GLib.file_test(e.path, GLib.FileTest.EXISTS));
-            this._sort();
-        } catch (e) {
-            logError(e, 'ClipEmoji: registry unreadable, starting fresh');
-            this._entries = [];
-        }
+        this._registryFile.load_contents_async(null, (_file, res) => {
+            if (this._destroyed) return;
+            try {
+                const [ok, contents] = this._registryFile.load_contents_finish(res);
+                if (!ok) return;
+                const parsed = JSON.parse(new TextDecoder().decode(contents));
+                const loaded = (parsed.entries || [])
+                    .map(ClipboardEntry.fromJSON)
+                    // Drop entries whose image file was cleaned up externally.
+                    .filter(e => !e.isImage || GLib.file_test(e.path, GLib.FileTest.EXISTS));
+                if (this._entries.length > 0) {
+                    for (const entry of this._entries) {
+                        const idx = loaded.findIndex(e => e.equals(entry));
+                        if (idx !== -1) loaded.splice(idx, 1);
+                        loaded.unshift(entry);
+                    }
+                }
+                this._entries = loaded;
+                this._sort();
+                this._emit();
+            } catch (e) {
+                if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.NOT_FOUND)) return;
+                logError(e, 'ClipEmoji: registry unreadable, starting fresh');
+                this._entries = [];
+                this._emit();
+            }
+        });
     }
 
     _scheduleWrite() {
